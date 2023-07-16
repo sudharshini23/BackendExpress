@@ -1,9 +1,3 @@
-// import http module -  since features not available globally
-// require keyword is used to import files in Node.js
-// require('./path to your file.js') -> relative path
-// require('/path to your file.js') -> absolute path
-// or require('core_module.js') -> wont look for a local file -> looks for a global module names http
-
 // ------------------------------------------------
 // const http = require('http') // http imported
 // ------------------------------------------------
@@ -21,6 +15,11 @@ const app = express();
 // this variable app is a reuest handler that can be passed as paramter to server
 // app sets up way of handling incoming requests
 
+// ------------------------------------------------
+const adminRoutes = require('./routes/admin.js');
+const shopRoutes = require('./routes/shop.js');
+// -------------------------------------------------
+
 // PARSER
 // ------------------------------------------------
 app.use(bodyParser.urlencoded({extended: false})); 
@@ -31,6 +30,18 @@ app.use(bodyParser.urlencoded({extended: false}));
 // MIDDLEWARE: After creating app object, but before creating server
 
 // ------------------------------------------------
+app.use('/admin', adminRoutes)    // order matters so if inserted after '/' doesnt reach
+app.use('/shop', shopRoutes);
+// ------------------------------------------------
+
+// -----------------------------------------------
+// ERROR 404
+app.use((req,res,next) => {
+    res.status(404).send('<h1> Page Not Found </h1>')
+})
+// ----------------------------------------------
+
+// ------------------------------------------------
 // app.use((req, res, next) => {
 //     console.log('In the middleware');
 //     next(); // Allows request to continue to next middleware in line
@@ -38,11 +49,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 // ------------------------------------------------
 
 // ------------------------------------------------
-app.use('/add-product', (req, res, next) => {
-    // console.log('In add-product route middleware page');
-    // res.send('<h1>The "add-product" page!</h1>');
-    res.send('<form action="/product" method="POST"><input type="text" name="title"><input type="text" name="size"><button type="submit">Add product</button></form>')
-}); 
+// app.use('/add-product', (req, res, next) => {
+//     // console.log('In add-product route middleware page');
+//     // res.send('<h1>The "add-product" page!</h1>');
+//     res.send('<form action="/product" method="POST"><input type="text" name="title"><input type="text" name="size"><button type="submit">Add product</button></form>')
+// }); 
 // -----------------------------------------------
 
 // -----------------------------------------------
@@ -54,18 +65,19 @@ app.use('/add-product', (req, res, next) => {
 
 // ONLY FOR GET REQUESTS: app.get()
 // FOR POST REQUESTS: app.post()
-app.post('/product', (req, res, next) => {
-    // extracting what is sent by user
-    console.log(req.body)   // gives undefined - use parser
-    console.log(req.body.size)
-    res.redirect('/');
-})
+// app.post('/product', (req, res, next) => {
+//     // extracting what is sent by user
+//     console.log(req.body)   // gives undefined - use parser
+//     console.log(req.body.size)
+//     res.redirect('/');
+// })
 
 // ------------------------------------------------
-app.use('/', (req, res, next) => {
-    // console.log('In another middleware');
-    res.send('<h1>Hello from Express!</h1>');
-}); 
+// app.use('/', (req, res, next) => {
+//     // console.log('In another middleware');
+//     res.send('<h1>Hello from Express!</h1>');
+// }); 
+// ---------------------------------------------------
 
 // ------------------------------------------------
 // Use allows to add new middleware function - accepts array of request handlers
