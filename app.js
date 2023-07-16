@@ -9,7 +9,8 @@
 // ------------------------------------------------
 
 // ------------------------------------------------
-const express = require('express') // express package imported
+const express = require('express'); // express package imported
+const bodyParser = require('body-parser');
 // ------------------------------------------------
 
 // ------------------------------------------------
@@ -20,15 +21,49 @@ const app = express();
 // this variable app is a reuest handler that can be passed as paramter to server
 // app sets up way of handling incoming requests
 
-// MIDDLEWARE: After creating app object, but before creating server
+// PARSER
 // ------------------------------------------------
-app.use((req, res, next) => {
-    console.log('In the middleware');
-    next(); // Allows request to continue to next middleware in line
-}); 
+app.use(bodyParser.urlencoded({extended: false})); 
+// ------------------------------------------------
+// should come before other middleware requests
+// exclusively for parsing form data bodies
 
-app.use((req, res, next) => {
-    console.log('In another middleware');
+// MIDDLEWARE: After creating app object, but before creating server
+
+// ------------------------------------------------
+// app.use((req, res, next) => {
+//     console.log('In the middleware');
+//     next(); // Allows request to continue to next middleware in line
+// }); 
+// ------------------------------------------------
+
+// ------------------------------------------------
+app.use('/add-product', (req, res, next) => {
+    // console.log('In add-product route middleware page');
+    // res.send('<h1>The "add-product" page!</h1>');
+    res.send('<form action="/product" method="POST"><input type="text" name="title"><input type="text" name="size"><button type="submit">Add product</button></form>')
+}); 
+// -----------------------------------------------
+
+// -----------------------------------------------
+// app.use('/product', (req, res, next) => {
+//     // extracting what is sent by user
+//     console.log(req.body)   // gives undefined - use parser
+//     res.redirect('/');
+// })
+
+// ONLY FOR GET REQUESTS: app.get()
+// FOR POST REQUESTS: app.post()
+app.post('/product', (req, res, next) => {
+    // extracting what is sent by user
+    console.log(req.body)   // gives undefined - use parser
+    console.log(req.body.size)
+    res.redirect('/');
+})
+
+// ------------------------------------------------
+app.use('/', (req, res, next) => {
+    // console.log('In another middleware');
     res.send('<h1>Hello from Express!</h1>');
 }); 
 
