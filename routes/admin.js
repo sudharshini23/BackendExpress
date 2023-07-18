@@ -1,4 +1,8 @@
+const path = require('path');
+
 const express = require('express');
+
+const rootDir = require('../util/path')
 
 const router = express.Router();
 
@@ -24,7 +28,9 @@ const router = express.Router();
 router.get('/add-product', (req, res, next) => {
     // console.log('In add-product route middleware page');
     // res.send('<h1>The "add-product" page!</h1>');
-    res.send('<form action="/admin/add-product" method="POST"><input type="text" name="title"><input type="text" name="size"><button type="submit">Add product</button></form>')
+    // res.send('<form action="/admin/add-product" method="POST"><input type="text" name="title"><input type="text" name="size"><button type="submit">Add product</button></form>')
+    // res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+    res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 }); 
 // ----------------------------------------------------------------
 // METHODS ARE DIFFERENT HENCE SAME PATH CAN BE USED
